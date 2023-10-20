@@ -37,16 +37,17 @@ internal class Program
             }
         );
         builder.Services.AddAuthorization();
-        // Mocking the data access 
-        builder.Services.AddScoped<IRepository<PictureDto,Picture>, PictureRepository>();
+
+        // Data base.  
+        builder.Services.AddScoped<IPictureRepository<PictureDto,Picture>, PictureRepository>();
         // Using mediatr
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         
-
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnection"))); 
+        
         // Identity 
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

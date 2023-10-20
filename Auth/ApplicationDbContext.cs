@@ -9,5 +9,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
     }
-    public DbSet<Picture> PicturesDbSet { get; set; }
+    public DbSet<Picture>? PicturesDbSet { get; set; }
 }

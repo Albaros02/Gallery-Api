@@ -3,8 +3,8 @@ using MediatR;
 
 class DeletePictureHandler : IRequestHandler<DeletePictureCommand, IAsyncResult>
 {
-    private readonly IRepository<PictureDto, Picture> repository;
-    public DeletePictureHandler(IRepository<PictureDto, Picture> repository) 
+    private readonly IPictureRepository<PictureDto, Picture> repository;
+    public DeletePictureHandler(IPictureRepository<PictureDto, Picture> repository) 
     {
         this.repository = repository;
     }

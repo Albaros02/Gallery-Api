@@ -1,15 +1,17 @@
 using GalleryApi.Data;
 using MediatR;
 
-class GetPictureByIdHandler : IRequestHandler<GetPictureByIdQuery, Picture>
+class GetPictureByIdHandler : IRequestHandler<GetPictureByIdQuery, (byte[],string)>
 {
-    private readonly IRepository<PictureDto, Picture> repository;
-    public GetPictureByIdHandler(IRepository<PictureDto, Picture> repository) 
+    private readonly IPictureRepository<PictureDto, Picture> repository;
+    public GetPictureByIdHandler(IPictureRepository<PictureDto, Picture> repository) 
     {
         this.repository = repository;
     }
-    public async Task<Picture> Handle(GetPictureByIdQuery request, CancellationToken cancellationToken)
+    public async Task<(byte[],string)> Handle(GetPictureByIdQuery request, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(repository.Get(request.id));
+        var picture = repository.Get(request.id);   
+        var response = repository.RetrievePicture(picture.PicturePathInPersistence!);
+        return await Task.FromResult((response,picture.ContentType));
     }
 }

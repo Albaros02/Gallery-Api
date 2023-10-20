@@ -1,2 +1,2 @@
 using MediatR;
-public record GetPictureByIdQuery(int id) : IRequest<Picture>; 
+public record GetPictureByIdQuery(int id) : IRequest<(byte[],string)>; 

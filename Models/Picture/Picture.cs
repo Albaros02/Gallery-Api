@@ -6,6 +6,7 @@ public class Picture : BaseDomainModel
         this.Album = dto.Album;
         this.Description = dto.Description;
         this.URL = dto.URL;
+        this.ContentType = dto.picture.ContentType;
         var name = Guid.NewGuid().ToString();
         this.PicturePathInPersistence = name;
     }
@@ -13,4 +14,5 @@ public class Picture : BaseDomainModel
     public string? URL { get; set; }
     public string? Album  { get; set; }
     public string? PicturePathInPersistence { get; set; }
+    public string? ContentType { get; set; }
 }

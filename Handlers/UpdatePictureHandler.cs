@@ -3,8 +3,8 @@ using MediatR;
 
 class UpdatePictureHandler : IRequestHandler<UpdatePictureCommand, IAsyncResult>
 {
-    private readonly IRepository<PictureDto, Picture> repository;
-    public UpdatePictureHandler(IRepository<PictureDto, Picture> repository) 
+    private readonly IPictureRepository<PictureDto, Picture> repository;
+    public UpdatePictureHandler(IPictureRepository<PictureDto, Picture> repository) 
     {
         this.repository = repository;
     }
