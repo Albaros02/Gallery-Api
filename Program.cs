@@ -1,3 +1,5 @@
+using GalleryApi.Data;
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -5,8 +7,8 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
         builder.Services.AddControllers();
+        builder.Services.AddSingleton<IRepository<Picture>, MockPictureRepository>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
