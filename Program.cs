@@ -1,4 +1,8 @@
+using System.Reflection;
+using GalleryApi.Controllers;
 using GalleryApi.Data;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 internal class Program
 {
@@ -9,6 +13,7 @@ internal class Program
         // Add services to the container.
         builder.Services.AddControllers();
         builder.Services.AddSingleton<IRepository<Picture>, MockPictureRepository>();
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
