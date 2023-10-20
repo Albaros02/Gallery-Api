@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using GalleryApi.Data;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 namespace GalleryApi.Controllers;
 
+[Authorize(AuthenticationSchemes = "Bearer")]
 [ApiController]
-[Route("[controller]")]
+[Route("")]
 public class PictureController : ControllerBase
 {
     private readonly IRepository<Picture> repository;
