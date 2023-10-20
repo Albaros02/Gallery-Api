@@ -6,62 +6,54 @@ using Microsoft.SqlServer.Server;
 
 class PictureRepository : IPictureRepository<PictureDto, Picture>
 {
-    const string RootPath = "./Data/PicturesPersistence";
-    private readonly ApplicationDbContext dataBaseContext;
-    public PictureRepository(ApplicationDbContext dataBaseContext)
+    private readonly ApplicationDbContext _dataBaseContext;
+    private readonly IStorageFileService _storageService;
+    public PictureRepository(ApplicationDbContext dataBaseContext, IStorageFileService storageService)
     {
-        this.dataBaseContext = dataBaseContext;
+        this._dataBaseContext = dataBaseContext;
+        this._storageService = storageService;
     }
     public async Task<IAsyncResult> Create(PictureDto dto)
     {
         Picture picture = new Picture(dto);
-        await SavePicture(dto.picture,picture.PicturePathInPersistence!);
-        await dataBaseContext.PicturesDbSet!.AddAsync(picture);
-        await dataBaseContext.SaveChangesAsync();
+        await _storageService.StoreFile(dto.picture,picture.PicturePathInPersistence!);
+        await _dataBaseContext.PicturesDbSet!.AddAsync(picture);
+        await _dataBaseContext.SaveChangesAsync();
         return Task.CompletedTask;   
     }
-    public async Task<IAsyncResult> SavePicture(IFormFile file, string name)
-    {
-        var stream = new FileStream(RootPath+"/"+name,FileMode.Create);
-        await file.CopyToAsync(stream);
-        stream.Close();
-        return Task.CompletedTask;
-    }
-    public byte[] RetrievePicture(string name)
-    {
-        var filePath = Path.Combine(Path.GetFullPath(RootPath), name);
-        byte[] rawData = System.IO.File.ReadAllBytes(filePath);   
-        return rawData;
-    }
-
     public async Task<IAsyncResult> Delete(int id)
     {
         var picture = this.Get(id);
         if(picture is not null)
         {
-            dataBaseContext.PicturesDbSet!.Remove(picture);
-            await dataBaseContext.SaveChangesAsync();
+            _dataBaseContext.PicturesDbSet!.Remove(picture);
+            await _dataBaseContext.SaveChangesAsync();
         }
         return Task.CompletedTask;
     }
     public Picture Get(int id)
     {
-        var result = dataBaseContext.PicturesDbSet!.FirstOrDefault(x => x.Id == id);
+        var result = _dataBaseContext.PicturesDbSet!.FirstOrDefault(x => x.Id == id);
         if(result is not null)
             return result;
         return null!;
     }
     public IEnumerable<Picture> GetAll()
     {
-        return dataBaseContext.PicturesDbSet!;
+        return _dataBaseContext.PicturesDbSet!;
+    }
+    public byte[] RetrievePicture(string name)
+    {
+        return _storageService.RetrieveFile(name);
     }
     public async Task<IAsyncResult> Update(int id, PictureDto newDto)
     {
         var newPicture = new Picture(newDto);
         newPicture.Id = id;
-        await SavePicture(newDto.picture,newPicture.PicturePathInPersistence!);
-        dataBaseContext.PicturesDbSet!.Update(newPicture);
-        await dataBaseContext.SaveChangesAsync();
+        await _storageService.StoreFile(newDto.picture,newPicture.PicturePathInPersistence!);
+        _dataBaseContext.PicturesDbSet!.Update(newPicture);
+        await _dataBaseContext.SaveChangesAsync();
         return Task.CompletedTask;
     }
+
 }

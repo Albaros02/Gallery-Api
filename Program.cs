@@ -42,7 +42,9 @@ internal class Program
         builder.Services.AddScoped<IPictureRepository<PictureDto,Picture>, PictureRepository>();
         // Using mediatr
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-        
+        // Adding FileStorage Service
+        builder.Services.AddTransient<IStorageFileService,StorageFilesService>();
+
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         

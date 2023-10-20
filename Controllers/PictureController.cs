@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 namespace GalleryApi.Controllers;
 
-[Authorize(AuthenticationSchemes = "Bearer")]
+// [Authorize(AuthenticationSchemes = "Bearer")]
 [ApiController]
 [Route("")]
 public class PictureController : ControllerBase
@@ -28,6 +28,8 @@ public class PictureController : ControllerBase
     public async Task<IActionResult> Get(int id)
     {
         var result = await _mediator.Send(new GetPictureByIdQuery(id));
+        if(result.Item1.Length<=0 || result.Item2 == "")
+            return NotFound($"The id {id} is not in the data base.");
         var response = File(result.Item1, result.Item2);
         return response;
     }
