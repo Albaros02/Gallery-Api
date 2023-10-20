@@ -3,8 +3,8 @@ using MediatR;
 
 class GetPictureByIdHandler : IRequestHandler<GetPictureByIdQuery, Picture>
 {
-    private readonly IRepository<Picture> repository;
-    public GetPictureByIdHandler(IRepository<Picture> repository) 
+    private readonly IRepository<PictureDto, Picture> repository;
+    public GetPictureByIdHandler(IRepository<PictureDto, Picture> repository) 
     {
         this.repository = repository;
     }

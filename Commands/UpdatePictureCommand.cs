@@ -1,2 +1,2 @@
 using MediatR;
-public record UpdatePictureCommand(int id, Picture picture) : IRequest<IAsyncResult>; 
+public record UpdatePictureCommand(int id, PictureDto picture) : IRequest<IAsyncResult>; 

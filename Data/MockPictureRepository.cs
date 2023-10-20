@@ -1,19 +1,30 @@
 
 namespace GalleryApi.Data;
-public class MockPictureRepository : IRepository<Picture>
+public class MockPictureRepository : IRepository<PictureDto, Picture>
 {
+    const string RootPath = "./Data/PicturesPersistence";
     private List<Picture> _data = new List<Picture>();
-    public IAsyncResult Create(Picture entity)
+    public async Task<IAsyncResult> Create(PictureDto dto)
     {
-        _data.Add(entity);
+        Picture picture = new Picture(dto);
+        string name = picture.PicturePathInPersistence!; 
+        picture.CreatedTime = DateTime.Now;
+        await SavePicture(dto.picture,name);
+        _data.Add(picture);
+        return Task.CompletedTask;
+    }
+    private async Task<IAsyncResult> SavePicture(IFormFile file, string name)
+    {
+        var stream = new FileStream(RootPath+"/"+name,FileMode.Create);
+        await file.CopyToAsync(stream);
         return Task.CompletedTask;
     }
 
-    public IAsyncResult Delete(int id)
+    public Task<IAsyncResult> Delete(int id)
     {
         var picture = this.Get(id);
         _data.Remove(picture);
-        return Task.CompletedTask;
+        return (Task<IAsyncResult>)Task.CompletedTask;
     }
 
     public Picture Get(int id)
@@ -29,7 +40,7 @@ public class MockPictureRepository : IRepository<Picture>
         return _data;
     }
 
-    public IAsyncResult Update(int id, Picture newEntity)
+    public Task<IAsyncResult> Update(int id, PictureDto newEntity)
     {
         throw new NotImplementedException();
     }

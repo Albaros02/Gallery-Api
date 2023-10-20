@@ -38,7 +38,7 @@ internal class Program
         );
         builder.Services.AddAuthorization();
         // Mocking the data access 
-        builder.Services.AddSingleton<IRepository<Picture>, MockPictureRepository>();
+        builder.Services.AddSingleton<IRepository<PictureDto,Picture>, MockPictureRepository>();
         // Using mediatr
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         

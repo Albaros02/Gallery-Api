@@ -1,3 +1,2 @@
 using MediatR;
-
-public record PictureDto(string Description,string URL, string Album);
+public record PictureDto( IFormFile picture,string Description,string Album, string URL);

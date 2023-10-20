@@ -3,14 +3,14 @@ using MediatR;
 
 class UpdatePictureHandler : IRequestHandler<UpdatePictureCommand, IAsyncResult>
 {
-    private readonly IRepository<Picture> repository;
-    public UpdatePictureHandler(IRepository<Picture> repository) 
+    private readonly IRepository<PictureDto, Picture> repository;
+    public UpdatePictureHandler(IRepository<PictureDto, Picture> repository) 
     {
         this.repository = repository;
     }
 
-    public Task<IAsyncResult> Handle(UpdatePictureCommand request, CancellationToken cancellationToken)
+    public async Task<IAsyncResult> Handle(UpdatePictureCommand request, CancellationToken cancellationToken)
     {
-        return Task.FromResult(repository.Update(request.id,request.picture));
+        return await repository.Update(request.id,request.picture);
     }
 }

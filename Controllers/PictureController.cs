@@ -5,15 +5,15 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 namespace GalleryApi.Controllers;
 
-[Authorize(AuthenticationSchemes = "Bearer")]
+// [Authorize(AuthenticationSchemes = "Bearer")]
 [ApiController]
 [Route("")]
 public class PictureController : ControllerBase
 {
-    private readonly IRepository<Picture> repository;
+    private readonly IRepository<PictureDto, Picture> repository;
     private readonly IMediator _mediator;
 
-    public PictureController(IRepository<Picture> repository, IMediator mediator)
+    public PictureController(IRepository<PictureDto,Picture> repository, IMediator mediator)
     {
         this.repository = repository;
         this._mediator = mediator;
@@ -34,7 +34,7 @@ public class PictureController : ControllerBase
     }
     [HttpPost]
     [Route("Picture")]
-    public async Task<IActionResult> Create(Picture picture)
+    public async Task<IActionResult> Create([FromForm]PictureDto picture)
     {
         var result = await _mediator.Send(new CreatePictureCommand(picture));
         return Ok(result);
@@ -48,7 +48,7 @@ public class PictureController : ControllerBase
     }
     [HttpPut]
     [Route("Picture/{id}")]
-    public async Task<IActionResult> Update(int id, Picture picture)
+    public async Task<IActionResult> Update(int id, PictureDto picture)
     {
         var result = await _mediator.Send(new UpdatePictureCommand(id, picture));
         return Ok(result);
