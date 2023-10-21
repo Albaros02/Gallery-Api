@@ -1,46 +1,57 @@
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using GalleryApi.Data;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 namespace GalleryApi.Controllers;
 
+// [Authorize(AuthenticationSchemes = "Bearer")]
 [ApiController]
-[Route("[controller]")]
+[Route("")]
 public class PictureController : ControllerBase
 {
-    private readonly IRepository<Picture> repository;
+    private readonly IMediator _mediator;
 
-    public PictureController(IRepository<Picture> repository)
+    public PictureController(IMediator mediator)
     {
-        this.repository = repository;
+        this._mediator = mediator;
     }
     [HttpGet]
     [Route("Picture")]
-    public IActionResult Get()
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(repository.GetAll());
+        var result = await _mediator.Send(new GetPictureQuery());
+        return Ok(result);        
     }
     [HttpGet]
     [Route("Picture/{id}")]
-    public IActionResult Get(int id)
+    public async Task<IActionResult> Get(int id)
     {
-        return Ok(repository.Get(id));
+        var result = await _mediator.Send(new GetPictureByIdQuery(id));
+        if(result.Item1.Length<=0 || result.Item2 == "")
+            return NotFound($"The id {id} is not in the data base.");
+        var response = File(result.Item1, result.Item2);
+        return response;
     }
     [HttpPost]
     [Route("Picture")]
-    public IActionResult Get(Picture picture)
+    public async Task<IActionResult> Create([FromForm]PictureDto picture)
     {
-        return Ok(repository.Create(picture));
+        var result = await _mediator.Send(new CreatePictureCommand(picture));
+        return Ok(result);
     }
     [HttpDelete]
     [Route("Picture/{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        return Ok(repository.Delete(id));
+        var result = await _mediator.Send(new DeletePictureCommand(id));
+        return Ok(result);
     }
     [HttpPut]
     [Route("Picture/{id}")]
-    public IActionResult Delete(int id, Picture picture)
+    public async Task<IActionResult> Update([FromForm]PictureDto picture,int id)
     {
-        return Ok(repository.Update(id,picture));
+        var result = await _mediator.Send(new UpdatePictureCommand(id, picture));
+        return Ok(result);
     }
 }

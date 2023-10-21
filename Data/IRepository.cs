@@ -1,9 +1,9 @@
 namespace GalleryApi.Data;
-public interface IRepository<T>
+public interface IRepository<DTO,Entity>
 {
-    public IAsyncResult Create(T entity);
-    public IAsyncResult Delete(int id);
-    public IAsyncResult Update(int id,T newEntity);
-    public T Get(int id);
-    public IEnumerable<T> GetAll();
+    public Task<IAsyncResult> Create(DTO dto);
+    public Task<IAsyncResult> Delete(int id);
+    public Task<IAsyncResult> Update(int id,DTO newDto);
+    public Entity Get(int id);
+    public IEnumerable<Entity> GetAll();
 }
