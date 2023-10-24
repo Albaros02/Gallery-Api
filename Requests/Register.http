@@ -1,0 +1,8 @@
+POST http://localhost:5232/api/Authenticate/register HTTP/1.1
+# Accept: */*
+Content-Type: application/json
+
+{
+  "username": "albaro",
+  "password": "Albaro123*"
+}

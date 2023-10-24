@@ -4,8 +4,10 @@ using GalleryApi.Data;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Principal;
 namespace GalleryApi.Controllers;
 
+// Comment here to avoid auth.
 [Authorize(AuthenticationSchemes = "Bearer")]
 [ApiController]
 [Route("")]
@@ -20,109 +22,86 @@ public class PictureController : ControllerBase
     [Route("Picture")]
     public async Task<IActionResult> GetAll()
     {
-        var userIdentity = this.User.Identity;
-        if(userIdentity is null || userIdentity.Name is null)
+        if(isAuthorizedUser(User.Identity))
         {
-            return BadRequest("There is not a user given.");
-        }
-        var userName = userIdentity.Name;
-        bool flag =_mediator.Send(new UserExistsQuery(userName)).Result;
-        if(flag)
-        {
-            var result = await _mediator.Send(new GetPictureQuery(userName));
+            var result = await _mediator.Send(new GetPictureQuery(User.Identity!.Name!));
             return Ok(result);
         }
         else 
         {
-            return NotFound("User not found.");
+            return BadRequest("There is not a user given or invalid.");
         }
     }
     [HttpGet]
     [Route("Picture/{id}")]
     public async Task<IActionResult> Get(int id)
     {
-        var userIdentity = this.User.Identity;
-        if(userIdentity is null || userIdentity.Name is null)
+        if(isAuthorizedUser(User.Identity))
         {
-            return BadRequest("There is not a user given.");
-        }
-        var userName = userIdentity.Name;
-        bool flag =_mediator.Send(new UserExistsQuery(userName)).Result;
-        if(flag)
-        {
-            var result = await _mediator.Send(new GetPictureByIdQuery(id,userName));
+            var result = await _mediator.Send(new GetPictureByIdQuery(id,User.Identity!.Name!));
             if(result.Item1.Length<=0 || result.Item2 == "")
                 return NotFound($"The id {id} is not in the data base.");
             var response = File(result.Item1, result.Item2);
-                return response;
+                return response!;
         }
         else 
         {
-            return NotFound("User not found.");
+            return BadRequest("There is not a user given or invalid.");
         }
     }
     [HttpPost]
     [Route("Picture")]
     public async Task<IActionResult> Create([FromForm]PictureDto picture)
     {   
-        var userIdentity = this.User.Identity;
-        if(userIdentity is null || userIdentity.Name is null)
+        if(isAuthorizedUser(User.Identity))
         {
-            return BadRequest("There is not a user given.");
-        }
-        var userName = userIdentity.Name;
-        bool flag =_mediator.Send(new UserExistsQuery(userName)).Result;
-        if(flag)
-        {
-            var result = await _mediator.Send(new CreatePictureCommand(picture, userName));
+            var result = await _mediator.Send(new CreatePictureCommand(picture, User.Identity!.Name!));
             return Ok(result);
         }
         else 
         {
-            return NotFound("User not found.");
+            return BadRequest("There is not a user given or invalid.");
         }
     }
     [HttpDelete]
     [Route("Picture/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var userIdentity = this.User.Identity;
-        if(userIdentity is null || userIdentity.Name is null)
+        if(isAuthorizedUser(User.Identity))
         {
-            return BadRequest("There is not a user given.");
-        }
-        var userName = userIdentity.Name;
-        bool flag =_mediator.Send(new UserExistsQuery(userName)).Result;
-        if(flag)
-        {
-            var result = await _mediator.Send(new DeletePictureCommand(id,userName));
+            var result = await _mediator.Send(new DeletePictureCommand(id,User.Identity!.Name!));
             return Ok(result);
         }
-        else
+        else 
         {
-            return NotFound("User not found.");
+            return BadRequest("There is not a user given or invalid.");
         }
     }
     [HttpPut]
     [Route("Picture/{id}")]
     public async Task<IActionResult> Update([FromForm]PictureDto picture,int id)
     {
-        var userIdentity = this.User.Identity;
+        if(isAuthorizedUser(User.Identity))
+        {
+            var result = await _mediator.Send(new UpdatePictureCommand(id, picture,User.Identity!.Name!));
+            return Ok(result);
+        }
+        else 
+        {
+            return BadRequest("There is not a user given or invalid.");
+        }
+    }
+    private bool isAuthorizedUser(IIdentity? userIdentity)
+    {
+        // Uncomment this line and comment the decorator in top
+        // of the controller to use the api with no auth.
+        // return true;
         if(userIdentity is null || userIdentity.Name is null)
         {
-            return BadRequest("There is not a user given.");
+            return false;
         }
         var userName = userIdentity.Name;
         bool flag =_mediator.Send(new UserExistsQuery(userName)).Result;
-        if(flag)
-        {
-            // var userName = "string";
-            var result = await _mediator.Send(new UpdatePictureCommand(id, picture, userName));
-            return Ok(result);
-        }
-        else
-        {
-            return NotFound("User not found.");
-        }
+        return flag;
     }
 }

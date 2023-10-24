@@ -1,0 +1,5 @@
+@id = 0
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWxiYXJvIiwianRpIjoiYTk0OWIzZWMtYzZhOS00NmYzLWJkZDItMTQ4Y2Q4NjE2MTE3IiwiZXhwIjoxNjk4MTc4OTcwLCJpc3MiOiJHYWxsZXJ5QXBpIiwiYXVkIjoiR2FsbGVyeUFwaUNvbnN1bWVyIn0.uA1w2tcJGAmhpJRkaf4f2XvQdVRDDDq15IFjV1R5ccc
+
+GET http://localhost:5232/Picture/{{id}} HTTP/1.1
+Authorization: Bearer {{token}}

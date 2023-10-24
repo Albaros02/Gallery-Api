@@ -1,0 +1,5 @@
+@id = 1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoic3RyaW5nIiwianRpIjoiYTE2Y2Q0YTQtYjRhMy00NjIzLWEzZTItODBjNzM0NDMxOGVlIiwiZXhwIjoxNjk4MTc4NzgyLCJpc3MiOiJHYWxsZXJ5QXBpIiwiYXVkIjoiR2FsbGVyeUFwaUNvbnN1bWVyIn0.omuIr8Y9Db-NqVTExmT8HGlKRDJFV-9fDo5FDN2Z0hk
+
+DELETE http://localhost:5232/Picture/{{id}} HTTP/1.1
+Authorization: Bearer {{token}}

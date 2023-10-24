@@ -10,6 +10,7 @@ class GetPictureHandler : IRequestHandler<GetPictureQuery, IEnumerable<Picture>>
     }
     Task<IEnumerable<Picture>> IRequestHandler<GetPictureQuery, IEnumerable<Picture>>.Handle(GetPictureQuery request, CancellationToken cancellationToken)
     {
-        return Task.FromResult(repository.GetAll(request.userName));
+        var name = (request.userName is null)? "nullName": request.userName;
+        return Task.FromResult(repository.GetAll(name));
     }
 }

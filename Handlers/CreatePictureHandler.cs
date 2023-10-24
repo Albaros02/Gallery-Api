@@ -10,6 +10,7 @@ class CreatePictureHandler : IRequestHandler<CreatePictureCommand, IAsyncResult>
     }
     public async Task<IAsyncResult> Handle(CreatePictureCommand request, CancellationToken cancellationToken)
     {
-        return await repository.Create(request.picture,request.name);
+        var name = (request.name is null)? "nullName": request.name;
+        return await repository.Create(request.picture,name);
     }
 }

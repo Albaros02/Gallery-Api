@@ -39,6 +39,8 @@ internal class Program
         builder.Services.AddAuthorization();
 
         // Data base.  
+        // Uncomment this line to use not a true persistence and comment the fallowing line.
+        // builder.Services.AddSingleton<IPictureRepository<PictureDto,Picture>, MockPictureRepository>();
         builder.Services.AddScoped<IPictureRepository<PictureDto,Picture>, PictureRepository>();
         // Using mediatr
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
