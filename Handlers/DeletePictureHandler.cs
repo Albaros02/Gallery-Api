@@ -10,6 +10,6 @@ class DeletePictureHandler : IRequestHandler<DeletePictureCommand, IAsyncResult>
     }
     public async Task<IAsyncResult> Handle(DeletePictureCommand request, CancellationToken cancellationToken)
     {
-        return await repository.Delete(request.id);
+        return await repository.Delete(request.id, request.userName);
     }
 }

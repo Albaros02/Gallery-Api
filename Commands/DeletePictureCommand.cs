@@ -1,2 +1,2 @@
 using MediatR;
-public record DeletePictureCommand(int id) : IRequest<IAsyncResult>; 
+public record DeletePictureCommand(int id, string userName) : IRequest<IAsyncResult>; 

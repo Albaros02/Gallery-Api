@@ -1,2 +1,2 @@
 using MediatR;
-public record GetPictureQuery() : IRequest<IEnumerable<Picture>>; 
+public record GetPictureQuery(string userName) : IRequest<IEnumerable<Picture>>; 

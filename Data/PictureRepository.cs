@@ -13,18 +13,18 @@ class PictureRepository : IPictureRepository<PictureDto, Picture>
         this._dataBaseContext = dataBaseContext;
         this._storageService = storageService;
     }
-    public async Task<IAsyncResult> Create(PictureDto dto)
+    public async Task<IAsyncResult> Create(PictureDto dto, string name)
     {
-        Picture picture = new Picture(dto);
+        Picture picture = new Picture(dto, name);
         await _storageService.StoreFile(dto.picture,picture.PicturePathInPersistence!);
         await _dataBaseContext.PicturesDbSet!.AddAsync(picture);
         await _dataBaseContext.SaveChangesAsync();
         return Task.CompletedTask;   
     }
-    public async Task<IAsyncResult> Delete(int id)
+    public async Task<IAsyncResult> Delete(int id, string userName)
     {
         var picture = this.Get(id);
-        if(picture is not null)
+        if(picture is not null && picture.UserName == userName)
         {
             _dataBaseContext.PicturesDbSet!.Remove(picture);
             await _dataBaseContext.SaveChangesAsync();
@@ -38,17 +38,17 @@ class PictureRepository : IPictureRepository<PictureDto, Picture>
             return result;
         return null!;
     }
-    public IEnumerable<Picture> GetAll()
+    public IEnumerable<Picture> GetAll(string userName)
     {
-        return _dataBaseContext.PicturesDbSet!;
+        return _dataBaseContext.PicturesDbSet!.Where(x => x.UserName == userName);
     }
     public byte[] RetrievePicture(string name)
     {
         return _storageService.RetrieveFile(name);
     }
-    public async Task<IAsyncResult> Update(int id, PictureDto newDto)
+    public async Task<IAsyncResult> Update(int id, PictureDto newDto, string name)
     {
-        var newPicture = new Picture(newDto);
+        var newPicture = new Picture(newDto,name);
         newPicture.Id = id;
         await _storageService.StoreFile(newDto.picture,newPicture.PicturePathInPersistence!);
         _dataBaseContext.PicturesDbSet!.Update(newPicture);

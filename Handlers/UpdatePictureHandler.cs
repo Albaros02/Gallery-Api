@@ -11,6 +11,6 @@ class UpdatePictureHandler : IRequestHandler<UpdatePictureCommand, IAsyncResult>
 
     public async Task<IAsyncResult> Handle(UpdatePictureCommand request, CancellationToken cancellationToken)
     {
-        return await repository.Update(request.id,request.picture);
+        return await repository.Update(request.id,request.picture, request.name);
     }
 }

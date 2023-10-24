@@ -1,2 +1,2 @@
 using MediatR;
-public record CreatePictureCommand(PictureDto picture) : IRequest<IAsyncResult>; 
+public record CreatePictureCommand(PictureDto picture, string name) : IRequest<IAsyncResult>; 

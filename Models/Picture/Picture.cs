@@ -1,7 +1,7 @@
 public class Picture : BaseDomainModel
 {
     public Picture(){}
-    public Picture(PictureDto dto)
+    public Picture(PictureDto dto, string userName)
     {
         this.Album = dto.Album;
         this.Description = dto.Description;
@@ -9,7 +9,9 @@ public class Picture : BaseDomainModel
         this.ContentType = dto.picture.ContentType;
         var name = Guid.NewGuid().ToString();
         this.PicturePathInPersistence = name;
+        this.UserName = userName;
     }
+    public string? UserName { get; set; }
     public string? Description { get; set; }
     public string? URL { get; set; }
     public string? Album  { get; set; }
