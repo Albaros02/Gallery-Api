@@ -43,7 +43,7 @@ internal class Program
         // builder.Services.AddSingleton<IPictureRepository<PictureDto,Picture>, MockPictureRepository>();
         builder.Services.AddScoped<IPictureRepository<PictureDto,Picture>, PictureRepository>();
         // Using mediatr
-        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+        builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
         // Adding FileStorage Service
         builder.Services.AddTransient<IStorageFileService,StorageFilesService>();
 
