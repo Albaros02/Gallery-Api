@@ -1,8 +1,7 @@
 using GalleryApi.Data;
 using MediatR;
-using Microsoft.AspNetCore.Http.Features;
 
-class GetPictureByIdDetailsHandler : IRequestHandler<GetPictureByIdDetailsQuery, Picture?>
+class GetPictureByIdDetailsHandler : IRequestHandler<GetPictureByIdDetailsQuery, Picture>
 {
     private readonly IPictureRepository<PictureDto, Picture> repository;
     public GetPictureByIdDetailsHandler(IPictureRepository<PictureDto, Picture> repository) 
