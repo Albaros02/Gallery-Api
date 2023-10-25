@@ -49,6 +49,21 @@ public class PictureController : ControllerBase
             return BadRequest("There is not a user given or invalid.");
         }
     }
+    
+    [HttpGet]
+    [Route("Picture/{id}/details")]
+    public async Task<IActionResult> GetDetails(int id)
+    {
+        if(isAuthorizedUser(User.Identity))
+        {
+            var result = await _mediator.Send(new GetPictureByIdDetailsQuery(id,User.Identity!.Name!));
+            return Ok(result);
+        }
+        else 
+        {
+            return BadRequest("There is not a user given or invalid.");
+        }
+    }
     [HttpPost]
     [Route("Picture")]
     public async Task<IActionResult> Create([FromForm]PictureDto picture)
