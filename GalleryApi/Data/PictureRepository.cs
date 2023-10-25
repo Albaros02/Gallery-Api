@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.SqlServer.Server;
 
-class PictureRepository : IPictureRepository<PictureDto, Picture>
+public class PictureRepository : IPictureRepository<PictureDto, Picture>
 {
     private readonly ApplicationDbContext _dataBaseContext;
     private readonly IStorageFileService _storageService;
